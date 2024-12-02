@@ -1120,7 +1120,7 @@ def main():
                 s3_bucket_path = f"s3://{s3_bucket_string}/"
 
                 zip_file_name = os.path.join(
-                    args.output_dir, f"/checkpoint-{global_step}.zip"
+                    args.output_dir, f"checkpoint-{global_step}.zip"
                 )
 
                 subprocess.run(
