@@ -270,6 +270,7 @@ class VitonHDDataset(data.Dataset):
         return result
 
     def __len__(self):
+        print("len", len(self.im_names))
         return len(self.im_names)
 
 
@@ -700,6 +701,10 @@ def main():
         args.max_train_steps / num_update_steps_per_epoch
     )
 
+    print("Max training steps:", args.max_train_steps)
+    print("Steps per epoch:", num_update_steps_per_epoch)
+    print("Training epochs:", args.num_train_epochs)
+
     # Train!
     progress_bar = tqdm(
         range(0, args.max_train_steps),
@@ -1113,21 +1118,25 @@ def main():
                 # Define the S3 bucket path
                 s3_bucket_string = args.s3_bucket_name
                 aws_profile = args.aws_profile
-                s3_bucket_path = f"s3://{s3_bucket_string}"
+                s3_bucket_path = f"s3://{s3_bucket_string}/"
+                zip_file_path = os.path.join(
+                    args.output_dir, f"checkpoint-{global_step}.zip"
+                )
+                subprocess.run(["zip", "-r", zip_file_path, save_path])
 
                 subprocess.run(
                     [
                         "aws",
                         "s3",
-                        "cp",
-                        save_path,
-                        s3_bucket_path,
-                        "--recursive",
                         "--profile",
                         f"--{aws_profile}",
+                        "cp",
+                        zip_file_path,
+                        s3_bucket_path,
+                        "--recursive",
                     ]
                 )
-                subprocess.run(["rm", "-rf", save_path])
+                # subprocess.run(["rm", "-rf", save_path])
                 print(
                     f'Checkpoint saved to S3 bucket, {save_path.split("/")[-1]}'
                 )
