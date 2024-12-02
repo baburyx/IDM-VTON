@@ -1119,7 +1119,9 @@ def main():
                 s3_bucket_string = args.s3_bucket_name
                 s3_bucket_path = f"s3://{s3_bucket_string}/"
 
-                zip_file_name = f"checkpoint-{global_step}.zip"
+                zip_file_name = os.path.join(
+                    args.output_dir, f"/checkpoint-{global_step}.zip"
+                )
 
                 subprocess.run(
                     ["zip", "-r", f"{zip_file_name}", f"{save_path}"]
@@ -1131,16 +1133,22 @@ def main():
                         "--profile",
                         args.aws_profile,
                         "cp",
-                        f"{zip_file_name}",
+                        zip_file_name,
                         s3_bucket_path,
                     ]
                 )
+                try:
+                    subprocess.run(["rm", "-rf", save_path])
+                    subprocess.run(["rm", "-rf", zip_file_name])
+                    print(
+                        f'Checkpoint saved to S3 bucket, {save_path.split("/")[-1]}'
+                    )
+                    print("--" * 20)
+                except Exception as e:
+                    print(e)
+                    print("Error in deleting files")
+                    print("--" * 20)
 
-                subprocess.run(["rm", "-rf", save_path, zip_file_name])
-                print(
-                    f'Checkpoint saved to S3 bucket, {save_path.split("/")[-1]}'
-                )
-                print("--" * 20)
                 del pipeline
 
 
