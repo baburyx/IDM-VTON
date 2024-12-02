@@ -640,6 +640,7 @@ def main():
         batch_size=args.train_batch_size,
         num_workers=16,
     )
+
     test_dataset = VitonHDDataset(
         dataroot_path=args.data_dir,
         phase="test",
@@ -652,6 +653,10 @@ def main():
         batch_size=args.test_batch_size,
         num_workers=4,
     )
+    print("--" * 10)
+    print("TRAIN DATA COUNT: ", len(train_dataloader))
+    print("TEST DATA COUNT: ", len(test_dataloader))
+    print("--" * 10)
 
     overrode_max_train_steps = False
     num_update_steps_per_epoch = math.ceil(
