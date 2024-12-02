@@ -337,7 +337,7 @@ def parse_args():
     parser.add_argument(
         "--logging_steps",
         type=int,
-        default=1000,
+        default=500,
         help=(
             "Save a checkpoint of the training state every X updates. These checkpoints are only suitable for resuming"
             " training using `--resume_from_checkpoint`."
