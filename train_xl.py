@@ -1117,26 +1117,26 @@ def main():
 
                 # Define the S3 bucket path
                 s3_bucket_string = args.s3_bucket_name
-                aws_profile = args.aws_profile
                 s3_bucket_path = f"s3://{s3_bucket_string}/"
-                zip_file_path = os.path.join(
-                    args.output_dir, f"checkpoint-{global_step}.zip"
-                )
-                subprocess.run(["zip", "-r", zip_file_path, save_path])
 
+                zip_file_name = f"checkpoint-{global_step}.zip"
+
+                subprocess.run(
+                    ["zip", "-r", f"{zip_file_name}", f"{save_path}"]
+                )
                 subprocess.run(
                     [
                         "aws",
                         "s3",
                         "--profile",
-                        f"--{aws_profile}",
+                        args.aws_profile,
                         "cp",
-                        zip_file_path,
+                        f"{zip_file_name}",
                         s3_bucket_path,
-                        "--recursive",
                     ]
                 )
-                subprocess.run(["rm", "-rf", save_path])
+
+                subprocess.run(["rm", "-rf", save_path, zip_file_name])
                 print(
                     f'Checkpoint saved to S3 bucket, {save_path.split("/")[-1]}'
                 )
