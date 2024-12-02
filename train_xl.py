@@ -1136,7 +1136,7 @@ def main():
                         "--recursive",
                     ]
                 )
-                # subprocess.run(["rm", "-rf", save_path])
+                subprocess.run(["rm", "-rf", save_path])
                 print(
                     f'Checkpoint saved to S3 bucket, {save_path.split("/")[-1]}'
                 )
