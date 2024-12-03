@@ -295,7 +295,7 @@ def parse_args():
     parser.add_argument(
         "--checkpointing_epoch",
         type=int,
-        default=100,
+        default=3000,
         help=(
             "Save a checkpoint of the training state every X updates. These checkpoints are only suitable for resuming"
             " training using `--resume_from_checkpoint`."
@@ -338,7 +338,7 @@ def parse_args():
     parser.add_argument(
         "--logging_steps",
         type=int,
-        default=1000,
+        default=3000,
         help=(
             "Save a checkpoint of the training state every X updates. These checkpoints are only suitable for resuming"
             " training using `--resume_from_checkpoint`."
@@ -375,7 +375,7 @@ def parse_args():
     parser.add_argument(
         "--train_batch_size",
         type=int,
-        default=4,
+        default=8,
         help="Batch size (per device) for the training dataloader.",
     )
     parser.add_argument(
