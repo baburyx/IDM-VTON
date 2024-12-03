@@ -295,7 +295,7 @@ def parse_args():
     parser.add_argument(
         "--checkpointing_epoch",
         type=int,
-        default=10,
+        default=100,
         help=(
             "Save a checkpoint of the training state every X updates. These checkpoints are only suitable for resuming"
             " training using `--resume_from_checkpoint`."
@@ -338,7 +338,7 @@ def parse_args():
     parser.add_argument(
         "--logging_steps",
         type=int,
-        default=500,
+        default=1000,
         help=(
             "Save a checkpoint of the training state every X updates. These checkpoints are only suitable for resuming"
             " training using `--resume_from_checkpoint`."
@@ -375,7 +375,7 @@ def parse_args():
     parser.add_argument(
         "--train_batch_size",
         type=int,
-        default=6,
+        default=4,
         help="Batch size (per device) for the training dataloader.",
     )
     parser.add_argument(
@@ -384,7 +384,7 @@ def parse_args():
         default=4,
         help="Batch size (per device) for the training dataloader.",
     )
-    parser.add_argument("--num_train_epochs", type=int, default=130)
+    parser.add_argument("--num_train_epochs", type=int, default=533)
     parser.add_argument(
         "--max_train_steps",
         type=int,
@@ -1074,9 +1074,7 @@ def main():
 
                 optimizer.step()
                 optimizer.zero_grad()
-                # Load scheduler, tokenizer and models.
-                progress_bar.update(1)
-                global_step += 1
+
             if accelerator.sync_gradients:
                 progress_bar.update(1)
                 global_step += 1
@@ -1088,7 +1086,7 @@ def main():
             if global_step >= args.max_train_steps:
                 break
 
-        if global_step % args.checkpointing_epoch == 0:
+        if epoch % args.checkpointing_epoch == 0:
             if accelerator.is_main_process:
                 # _before_ saving state, check if this save would set us over the `checkpoints_total_limit`
                 unwrapped_unet = accelerator.unwrap_model(
