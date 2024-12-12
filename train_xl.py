@@ -1,4 +1,4 @@
-import argparse
+ import argparse
 import itertools
 import json
 import math
@@ -825,14 +825,9 @@ def main():
                                                 strength=1.0,
                                                 pose_img=sample["pose_img"],
                                                 text_embeds_cloth=prompt_embeds_c,
-                                                cloth=sample["cloth_pure"].to(
-                                                    accelerator.device
-                                                ),
-                                                mask_image=sample[
-                                                    "inpaint_mask"
-                                                ],
-                                                image=(sample["image"] + 1.0)
-                                                / 2.0,
+                                                cloth=sample["cloth_pure"].to(accelerator.device),
+                                                mask_image=sample["inpaint_mask"],
+                                                image=(sample["image"] + 1.0) / 2.0,
                                                 height=args.height,
                                                 width=args.width,
                                                 guidance_scale=args.guidance_scale,
